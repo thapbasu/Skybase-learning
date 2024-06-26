@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Inter } from 'next/font/google';
 import { MdDelete } from 'react-icons/md';
-import { RiEdit2Line } from 'react-icons/ri'; // Changed to RiEdit2Line for consistency
+import { RiEdit2Line } from 'react-icons/ri';
 import EditTasks from './components/EditTasks';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -51,7 +51,9 @@ const Home = () => {
       setNewTask('');
     }
   };
-
+  const removeAll = () => {
+    setTasks([]);
+  };
   return (
     <div>
       {showEdit && (
@@ -86,30 +88,44 @@ const Home = () => {
             <h2 className="underline font-bold text-xl text-center pb-6">
               Your Tasks
             </h2>
-            <div className="flex flex-col gap-y-4">
-              {tasks.map((task, index) => (
-                <div
-                  key={index}
-                  className="flex items-center bg-gray-400 rounded-lg px-4 py-2 justify-between"
-                >
-                  <div className="flex gap-x-2">
-                    <h3>{index + 1}</h3>
-                    <h1>{task}</h1>
+            {tasks.length > 0 ? (
+              <div className="flex flex-col gap-y-4">
+                {tasks.map((task, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center bg-gray-400 rounded-lg px-4 py-2 justify-between"
+                  >
+                    <div className="flex gap-x-2">
+                      <h3>{index + 1}</h3>
+                      <h1>{task}</h1>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <RiEdit2Line
+                        className="size-6 cursor-pointer"
+                        onClick={() => handleEdit(index)}
+                      />
+                      <MdDelete
+                        className="size-6 cursor-pointer"
+                        onClick={() => handleDelete(index)}
+                      />
+                    </div>
                   </div>
-                  <div className="flex gap-x-2">
-                    <RiEdit2Line
-                      className="size-6 cursor-pointer"
-                      onClick={() => handleEdit(index)}
-                    />
-                    <MdDelete
-                      className="size-6 cursor-pointer"
-                      onClick={() => handleDelete(index)}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <h2>You haven't added any tasks yet! Add now?</h2>
+            )}
           </div>
+          {tasks.length >= 1 && (
+            <div className="flex items-center justify-center pt-10">
+              <button
+                className="text-center px-5 py-2 bg-red-400 text-white cursor-pointer rounded-xl"
+                onClick={removeAll}
+              >
+                Remove all
+              </button>
+            </div>
+          )}
         </div>
       </main>
     </div>
